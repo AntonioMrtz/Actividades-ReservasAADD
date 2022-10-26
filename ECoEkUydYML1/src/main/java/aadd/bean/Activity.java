@@ -1,19 +1,37 @@
 package aadd.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 
-public class Activity {
+import org.bson.codecs.pojo.annotations.BsonId;
+
+public class Activity implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	@BsonId
 	private String code;
 	private Date startDate;
 	private int availableSpots;
 	private String activityName;
 	private String description;
 	private String type;
-	private HashSet<User> users;
+	private List<Integer> users;
+	
+	public Activity() {
+		
+		
+		
+	}
 	
 	public Activity(String code,Date startDate,int availableSpots,String activityName,String description,String type) {
+		
 		
 		this.code=code;
 		this.startDate=startDate;
@@ -22,7 +40,7 @@ public class Activity {
 		this.description=description;
 		this.type=type;
 		
-		users=new HashSet<>();
+		users=new ArrayList<>();
 		
 	}
 	
@@ -31,9 +49,6 @@ public class Activity {
 		return code;
 	}
 
-	public Date getStartDate() {
-		return startDate;
-	}
 
 	public int getAvailableSpots() {
 		return availableSpots;
@@ -53,11 +68,11 @@ public class Activity {
 	
 
 
-	public HashSet<User> getUsers() {
-		return new HashSet<>(users);
+	public ArrayList<Integer> getUsers() {
+		return new ArrayList<>(users);
 	}
 
-	public void addUser(User u) {
+	public void addUser(Integer u) {
 		
 		users.add(u);
 		
@@ -77,10 +92,5 @@ public class Activity {
 				+ users + "]";
 	}
 	
-	
-	
-
-
-	
-
 }
+	

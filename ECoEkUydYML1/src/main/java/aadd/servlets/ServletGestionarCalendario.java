@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -14,10 +14,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import aadd.bean.Activity;
-import aadd.bean.User;
+import dao.ActivityDAO;
 
 @WebServlet(urlPatterns = { "/calendario" })
 public class ServletGestionarCalendario extends HttpServlet {
@@ -25,25 +24,29 @@ public class ServletGestionarCalendario extends HttpServlet {
 	
 	private HashMap<Activity,Integer> database;
 	
+	
+	
 	public HashMap<Activity,Integer> getDatabase(){
 		
 		return new HashMap<>(database);
 	}
+	
+
+
 
     public ServletGestionarCalendario() {
         super();
+        
     }
 
 
-	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ServletContext app = getServletConfig().getServletContext();
 		PrintWriter out = response.getWriter();
 		
 	
 
-		
+		// VER RESERVAS DEL USUARIO
 		
 		if(request.getParameterMap().containsKey("ver_reservas")) {
 			
@@ -51,8 +54,10 @@ public class ServletGestionarCalendario extends HttpServlet {
 		}
 		
 		
-		else if (request.getParameterMap().containsKey("mes") && request.getParameterMap().containsKey("anyo")) { // CONSULTA
-																										// ACTIVIDADES
+		
+		// CONSULTA ACTIVIDADES
+		
+		else if (request.getParameterMap().containsKey("mes") && request.getParameterMap().containsKey("anyo")) { 
 
 			
 			if(request.getParameter("anyo")=="") {
@@ -64,63 +69,22 @@ public class ServletGestionarCalendario extends HttpServlet {
 			int mes = Integer.parseInt(request.getParameter("mes"))+1;
 
 			
-			//out.println(mes+" "+anyo); out.println();
-			 
-
-			database = (HashMap<Activity, Integer>) app.getAttribute("database");
+				
+			//TODO check actividades del mes
+				
 			
-			/*out.println(database);
-			out.println(database.keySet());*/
 			
-			if(database!=null) {
-				
-				
-				for (Activity a : database.keySet()) {
-					
-//					out.println(mes);
-//					out.println(a.getStartDate().getMonth()+1);
-//					out.println(a.getStartDate().getYear()+1900);
-//					out.println(anyo);
-//					out.println();
-					
-					//out.printl);
-					//out.println(a.getStartDate().getYear()+1900);
-					//out.println(a.getStartDate().getMonth()+1);
-					
-					if (a.getStartDate().getMonth() + 1 == mes ) {
-						
-						
-						if(a.getStartDate().getYear() + 1900 == anyo) {
-							
-							//out.println(a.getActivityName() + ", code = " + a.getCode());
-							out.println(a.getActivityName()+" | plazas "+a.getAvailableSpots());
-							
-							if (a.getDescription()!="") {
-								out.println(a.getDescription());
-								
-							}
-							
-							//out.println(a.getAvailableSpots() + " plazas");
-							
-							out.println();
-							
-						}
-						
-						
-					}
-					
-				}
-				
-			}
-			
-			else{
-
-				out.println("Sin actividades");
-				
-			}
+//			else{
+//
+//				out.println("Sin actividades");
+//				
+//			}
 
 		}
 
+		
+		// REGISTRAR ACTIVIDAD
+		
 		else if(request.getParameterMap().containsKey("nombre")){
 
 			int error_flag = 0;
@@ -153,7 +117,6 @@ public class ServletGestionarCalendario extends HttpServlet {
 
 				try {
 					date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fecha);
-					 //out.println(date);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -164,60 +127,28 @@ public class ServletGestionarCalendario extends HttpServlet {
 			}
 
 			// tratamiento datos obligatorios
-
 			if (request.getParameter("codigo").isEmpty() || request.getParameter("nombre").isEmpty()
 					|| request.getParameter("plazas").isEmpty() || request.getParameter("tipo").isEmpty()) {
 
-				// request.getRequestDispatcher("indexerror.html").include(request, response);
 				error_flag += 1;
 			}
 
 			else {
-
+				
 				activity = new Activity(request.getParameter("codigo"), date,
 						Integer.parseInt(request.getParameter("plazas")), request.getParameter("nombre"),
-						request.getParameter("descripcion"), request.getParameter("tipo"));
-
-				// out.println("actividad creada correctamente");
-				// out.println(activity);
-
+						request.getParameter("descripcion"), request.getParameter("tipo"));	
 			}
 
-			// reenviar a index_errores o guardar en DB
 
 			if (error_flag > 0) {
 
 				request.getRequestDispatcher("indexerror.html").include(request, response);
-			} else {
+				
+				
+			} else if(ActivityDAO.getActivityDAO().crearActividad(activity)){
 
-				int activity_exists = 0;
-
-				database = (HashMap<Activity, Integer>) app.getAttribute("database");
-
-				if (database == null) {
-
-					database = new HashMap<Activity, Integer>();
-					app.setAttribute("database", database);
-				}
-
-				for (Activity a : database.keySet()) {
-
-					if (a.getCode().equals(activity.getCode())) {
-
-						activity_exists = 1;
-
-					}
-
-				}
-
-				if (activity_exists == 0) {
-
-					database.put(activity, activity.getAvailableSpots());
-					app.setAttribute("database", database);
-					//out.println(database);
-					out.println("Actividad creada con código "+request.getParameter("codigo"));
-
-				}
+				out.println("Actividad creada | Codigo : "+activity.getCode());
 
 			}
 

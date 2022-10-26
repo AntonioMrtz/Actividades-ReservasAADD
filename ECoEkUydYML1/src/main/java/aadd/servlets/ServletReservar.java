@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import aadd.bean.Activity;
 import aadd.bean.User;
+import dao.ActivityDAO;
 
 
 @WebServlet("/reservar")
@@ -58,7 +59,6 @@ public class ServletReservar extends HttpServlet {
 		}
 		
 		User u = (User) sesion.getAttribute("user");
-		ServletContext app = getServletConfig().getServletContext();
 		
 		
 		
@@ -69,96 +69,30 @@ public class ServletReservar extends HttpServlet {
 			request.getRequestDispatcher("reservar_actividad.html").include(request, response);
 			
 		}
-		
-		
-		
-		// hay parametro ver_reservas -> ver reservas
-		
-		
+	
 		else if(request.getParameterMap().containsKey("ver_reservas")) { //mostrar reservas usuario
 			
-			// traemos la base de datos
-			HashMap<Activity, Integer> database=(HashMap<Activity, Integer>) app.getAttribute("database");
 			
-			int flag=0; // para comprobar si no se obtiene ninguna actividad con la condicion indicada
+			//TODO CHECK RESERVAS USARIO
 			
-			if(database!=null) {
-				
-				for(Activity a : database.keySet()) {
-					
-					for(User us:a.getUsers()) {
-						
-						if(us.getCode()==u.getCode()) {
-							
-							flag=1;
-							
-							if(a.getDescription()!="") {
-								
-								out.println(a.getActivityName()+" "+a.getDescription());
-								
-							}
-							else {
-								
-								out.println(a.getActivityName());
-							}
-							
-							
-						}
-					}
-					
-				}
-				
-				if(flag==0) {
-					
-					out.println("No hay reservas");
-				}
-				
-			}else {
-				
-				out.println("Sin reservas ");
-			}
+			out.println("No hay reservas");
 			
-			
+		
 		}
 		else{ 	// pantalla para reservar
 		
 			
-			HashMap<Activity, Integer> database=(HashMap<Activity, Integer>) app.getAttribute("database");
 			
 			String code_actividad=request.getParameter("actividad");
-			//out.println(code_actividad);
-			int flag=0;
 			
-			
-			for(Activity a : database.keySet()) {
+			if(!ActivityDAO.getActivityDAO().reservar(code_actividad,u.getCode())) {
 				
-				if(a.getCode().equals(code_actividad) && a.getAvailableSpots()>0 && !a.getUsers().contains(u)) {
-					
-					a.addUser(u);
-					a.decreaseAvailableSpots();
-					
-					
-					database.put(a,a.getAvailableSpots());
-					
-					//database.remove(a);
-					
-					app.setAttribute("database", database);
-					
-					//out.println(database);
-					
-					out.println("Actividad reservada o modificada con éxito");
-					flag=1;
-					break;
-				}
-					
-				
-			}
-			
-			if(flag==0) {
 				
 				out.println("Reserva no disponible");
+				
 			}
 			
+		
 			
 		}
 	
