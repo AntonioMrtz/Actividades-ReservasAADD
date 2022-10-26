@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Formulario de registro</title>
+</head>
+<body class="marco">
+
+	<div>
+	<br>
+		<form method="POST" action="calendario" class="form">
+		
+		<div>
+			<h2 style="color:red">DATOS INCORRECTOS O NO OPCIONALES FALTANTES</h2>
+		</div>
+		
+			<div>
+				<label>Código de la actividad: </label><input name="codigo">
+			</div>
+			<div>
+				<label>Fecha: </label><input type="date" name="fecha">
+			</div>
+			<div>
+				<label>Hora (opcional) : </label><input type="time" name="hora">
+			</div>
+			<div>
+				<label>Número de plazas: </label> <input name="plazas">
+			</div>
+			<div>
+				<label>Nombre de la actividad: </label> <input name="nombre">
+			</div>
+			<div>
+				 <label>Descripción (opcional): </label> <br><textarea name="descripcion" rows="3" cols="50"></textarea>
+			</div>
+			
+			<div>
+			<label>Tipo de actividad: </label>
+			<br><br>
+			<select name="tipo">
+			  <option value="artesania">Artesanía</option>
+			  <option value="cine">Cine</option>
+			  <option value="fotografia">Fotografía</option>
+			  <option value="mind&body">Mind&Body</option>
+			</select>
+			
+			</div>
+			<br>
+			<input type="submit" value="Enviar" class="enviar">
+	   		
+		
+		</form>
+		
+		
+		<form method="POST" action="calendario?ver_reservas" class="form">
+			<input type="hidden" name="searchType" value="all" />
+			<input type="submit" value="Ver Actividades" class="enviar">	
+		</form>
+
+	</div>
+ 
+   
+</body>
+</html>

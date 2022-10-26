@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Formulario de reserva</title>
+</head>
+<body class="marco">
+
+	<div>
+	<br>
+		<form method="POST" action="reservar" class="form">
+			
+			<br>
+			<div>
+				<label>Código de la actividad a reservar: </label><input name="actividad">
+			</div>
+						
+			<input type="hidden" name="searchType" value="all" />
+			<input type="submit" value="Reservar" class="enviar">	
+		
+	
+		</form>
+ 
+ 		<br>
+ 		
+ 		
+ 		<form method="POST" action="reservar?ver_reservas" class="form">
+			<input type="hidden" name="searchType" value="all" />
+			<input type="submit" value="Ver reservas" class="enviar">	
+		</form>
+   
+	</div>
+</body>
+</html>
