@@ -111,7 +111,7 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 		
 		LocalDateTime l2;
 		
-		if(month==11) {
+		if(month==12) {
 			l2 = LocalDateTime.of(year+1, 1, 1, 0, 0);			
 		}
 		else {
