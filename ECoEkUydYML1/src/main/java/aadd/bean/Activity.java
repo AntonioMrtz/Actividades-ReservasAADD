@@ -1,8 +1,9 @@
 package aadd.bean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -17,7 +18,7 @@ public class Activity implements Serializable{
 	
 	@BsonId
 	private String code;
-	private Date startDate;
+	private LocalDateTime startDate;
 	private int availableSpots;
 	private String activityName;
 	private String description;
@@ -30,7 +31,7 @@ public class Activity implements Serializable{
 		
 	}
 	
-	public Activity(String code,Date startDate,int availableSpots,String activityName,String description,String type) {
+	public Activity(String code,LocalDateTime startDate,int availableSpots,String activityName,String description,String type) {
 		
 		
 		this.code=code;
@@ -45,33 +46,6 @@ public class Activity implements Serializable{
 	}
 	
 	
-	public String getCode() {
-		return code;
-	}
-
-
-	public int getAvailableSpots() {
-		return availableSpots;
-	}
-
-	public String getActivityName() {
-		return activityName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public String getType() {
-		return type;
-	}
-	
-
-
-	public ArrayList<Integer> getUsers() {
-		return new ArrayList<>(users);
-	}
-
 	public void addUser(Integer u) {
 		
 		users.add(u);
@@ -85,6 +59,64 @@ public class Activity implements Serializable{
 	
 	
 	
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+
+	public LocalDateTime getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public int getAvailableSpots() {
+		return availableSpots;
+	}
+
+	public void setAvailableSpots(int availableSpots) {
+		this.availableSpots = availableSpots;
+	}
+
+	public String getActivityName() {
+		return activityName;
+	}
+
+	public void setActivityName(String activityName) {
+		this.activityName = activityName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public List<Integer> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<Integer> users) {
+		this.users = users;
+	}
+
 	@Override
 	public String toString() {
 		return "Activity [code=" + code + ", startDate=" + startDate + ", availableSpots=" + availableSpots

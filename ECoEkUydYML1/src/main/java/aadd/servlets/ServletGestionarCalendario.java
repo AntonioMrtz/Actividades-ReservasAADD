@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -14,6 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.mongodb.client.MongoCursor;
 
 import aadd.bean.Activity;
 import dao.ActivityDAO;
@@ -70,15 +73,46 @@ public class ServletGestionarCalendario extends HttpServlet {
 
 			
 				
-			//TODO check actividades del mes
+			//check actividades del mes
+			
+
+			MongoCursor<Activity> cursor = ActivityDAO.getActivityDAO().checkActivities(anyo,mes);
+
+			if (cursor.hasNext()) {
+
+				try {
+					while (cursor.hasNext()) {
+						
+						Activity activity=cursor.next();
+						
+						if(!activity.getDescription().isEmpty()) {
+							
+							out.println(activity.getActivityName() + " | " + activity.getCode() + " | "+ activity.getDescription() + "\n");
+							
+						}
+						else {
+							
+						out.println(activity.getActivityName() + " | " + activity.getCode() + "\n");
+							
+						}
+
+					}
+				} finally {
+					cursor.close();
+				}
+
+			}
+
+			else {
+
+				out.println("Sin actividades");
+
+			}
 				
 			
 			
-//			else{
-//
-//				out.println("Sin actividades");
-//				
-//			}
+			
+
 
 		}
 
@@ -110,6 +144,7 @@ public class ServletGestionarCalendario extends HttpServlet {
 			}
 
 			Date date = null;
+			
 
 			if (!fecha.isEmpty()) {
 
@@ -125,6 +160,10 @@ public class ServletGestionarCalendario extends HttpServlet {
 				error_flag += 1;
 
 			}
+		
+				
+			LocalDateTime local_date_time =  LocalDate.of(date.getYear() + 1900, date.getMonth() + 1, date.getDay()).atTime(Integer.parseInt(hora), Integer.parseInt(minutos));			
+							
 
 			// tratamiento datos obligatorios
 			if (request.getParameter("codigo").isEmpty() || request.getParameter("nombre").isEmpty()
@@ -134,8 +173,9 @@ public class ServletGestionarCalendario extends HttpServlet {
 			}
 
 			else {
-				
-				activity = new Activity(request.getParameter("codigo"), date,
+
+								
+				activity = new Activity(request.getParameter("codigo"), local_date_time,
 						Integer.parseInt(request.getParameter("plazas")), request.getParameter("nombre"),
 						request.getParameter("descripcion"), request.getParameter("tipo"));	
 			}

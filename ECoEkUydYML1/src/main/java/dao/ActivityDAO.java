@@ -1,10 +1,16 @@
 package dao;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.conversions.Bson;
+
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 
 import aadd.bean.Activity;
@@ -54,8 +60,8 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     	Bson query_plazas=Filters.gt("availableSpots", 0);
     	Bson query_user=Filters.nin("users",user_code);
     	
+    	    	
     	Bson query= Filters.and(query_id,query_plazas,query_user);
-    	//Bson query= Filters.and(query_id,query_plazas);
     	
     	long resultados  = collection.countDocuments(query);
     	
@@ -71,10 +77,11 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     		
     		Bson query_user= Updates.push("users",user_code);
     		Bson query_spots= Updates.inc("availableSpots", -1);
-
     		
-    		collection.findOneAndUpdate(query_id, query_user);
-    		collection.findOneAndUpdate(query_id, query_spots);
+    		Bson query = Updates.combine(query_user,query_spots);
+    	
+    		
+    		collection.findOneAndUpdate(query_id, query);
 
     		
     		return true;
@@ -83,6 +90,47 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     	
     	return false;
     }
+    
+    public MongoCursor<Activity> checkReservas(Integer user_code) {
+    	
+    	Bson query_id=Filters.in("users",user_code);
+    	Bson query_fields=Projections.fields(Projections.include("activityName","description"));
+    	
+    	//collection.find(query_id).projection(query_fields);
+    	
+    	return collection.find(query_id).projection(query_fields).iterator();
+    	
+    	//return collection.find(Filters.eq("_id","12")).iterator();
+    	//return collection.find().iterator();
+    	
+    }
+
+	public MongoCursor<Activity> checkActivities(Integer year,Integer month) {
+		
+		LocalDateTime l1 = LocalDateTime.of(year,month, 1, 0, 0);
+		
+		LocalDateTime l2;
+		
+		if(month==11) {
+			l2 = LocalDateTime.of(year+1, 1, 1, 0, 0);			
+		}
+		else {
+			
+			l2 = LocalDateTime.of(year, month+1, 1, 0, 0);
+			
+		}
+		
+		
+		Bson query_date_start=Filters.gt("startDate", l1);
+		Bson query_date_end=Filters.lt("startDate", l2);
+		
+		Bson query=Filters.and(query_date_end,query_date_start);
+		
+		return collection.find(query).iterator();
+		
+
+		
+	}
     
  
 

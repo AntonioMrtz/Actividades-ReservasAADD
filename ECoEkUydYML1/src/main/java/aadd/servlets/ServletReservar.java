@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mongodb.client.MongoCursor;
+
 import aadd.bean.Activity;
 import aadd.bean.User;
 import dao.ActivityDAO;
@@ -73,9 +75,39 @@ public class ServletReservar extends HttpServlet {
 		else if(request.getParameterMap().containsKey("ver_reservas")) { //mostrar reservas usuario
 			
 			
-			//TODO CHECK RESERVAS USARIO
 			
-			out.println("No hay reservas");
+			MongoCursor<Activity> cursor = ActivityDAO.getActivityDAO().checkReservas(u.getCode());
+
+			if (cursor.hasNext()) {
+
+				try {
+					while (cursor.hasNext()) {
+						
+						Activity activity=cursor.next();
+						
+						if(!activity.getDescription().isEmpty()) {
+							
+							out.println(activity.getActivityName() + " | " + activity.getCode() + " | "+ activity.getDescription() + "\n");
+							
+						}
+						else {
+							
+						out.println(activity.getActivityName() + " | " + activity.getCode() + "\n");
+							
+						}
+
+					}
+				} finally {
+					cursor.close();
+				}
+
+			}
+
+			else {
+
+				out.println("No hay reservas");
+
+			}
 			
 		
 		}
@@ -90,6 +122,11 @@ public class ServletReservar extends HttpServlet {
 				
 				out.println("Reserva no disponible");
 				
+			}
+			
+			else {
+				
+				out.println("Reserva hecha");
 			}
 			
 		
