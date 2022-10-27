@@ -121,7 +121,7 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 		}
 		
 		
-		Bson query_date_start=Filters.gt("startDate", l1);
+		Bson query_date_start=Filters.gte("startDate", l1);
 		Bson query_date_end=Filters.lt("startDate", l2);
 		
 		Bson query=Filters.and(query_date_end,query_date_start);
