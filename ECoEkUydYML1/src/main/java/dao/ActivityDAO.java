@@ -29,6 +29,7 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     @Override
     public void createCollection() {
         collection = db.getCollection("activity", Activity.class).withCodecRegistry(defaultCodecRegistry);
+        collection_nocodec = db.getCollection("activity");
     }
     
     public boolean checkActivityExists(String code) {
@@ -36,7 +37,7 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     	Bson query=Filters.eq("_id",code);
     	
     	long resultados  = collection.countDocuments(query);
-    	
+    	    	
     	return resultados>0;
     	
     }
@@ -44,7 +45,7 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
     public boolean crearActividad(Activity actividad) {
     	
     	if(checkActivityExists(actividad.getCode())) {
-    		
+    		    		
     		return false;
     	}
     	
@@ -129,6 +130,20 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 		return collection.find(query).iterator();
 		
 
+		
+	}
+	
+	public MongoCursor<Activity> getAvailableActivities() {
+		
+		
+		LocalDateTime current_date= LocalDateTime.now();
+		
+		Bson query_date=Filters.gt("startDate",current_date);
+		Bson query_spots=Filters.gt("availableSpots",0);
+		
+		Bson query=Filters.and(query_date,query_spots);
+		
+		return collection.find(query).iterator();
 		
 	}
     
