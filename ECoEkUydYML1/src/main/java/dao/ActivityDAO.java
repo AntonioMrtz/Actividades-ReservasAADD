@@ -1,14 +1,20 @@
 package dao;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.BsonField;
+import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
@@ -146,7 +152,27 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 		return collection.find(query).iterator();
 		
 	}
-    
- 
+	
+	
+	public ArrayList<Document> getSpotsByMonthActivityType() {
+		
+
+		Bson project =Aggregates.project(new Document("activityName",1).append("availableSpots", 1).append("type",1).append("year",new Document("$year","$startDate")).append("month",new Document("$year","$startDate")));
+		Bson matchStage = Aggregates.match(Filters.eq("year",2022));
+		List<BsonField> acumuladores = new ArrayList<BsonField>();
+		acumuladores.add(Accumulators.sum("availableSpots","$availableSpots"));
+		acumuladores.add(Accumulators.sum("numActivities",1));	
+		acumuladores.add(Accumulators.addToSet("nameActivities","$activityName"));
+		List<String> fields = new ArrayList<>();
+		fields.add("$month");
+		fields.add("$type");
+	    Bson groupStage = Aggregates.group(fields, acumuladores);
+		
+		
+		return collection_nocodec.aggregate(Arrays.asList(project,matchStage,groupStage)).into(new ArrayList<>());
+		
+		
+	}
+
 
 }

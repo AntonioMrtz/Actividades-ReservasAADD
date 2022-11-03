@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.bson.Document;
 import org.junit.Before;
 
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 
 import aadd.bean.Activity;
@@ -78,6 +81,35 @@ public class Test {
 		
 		
 	}
+	
+	
+	@org.junit.Test
+	public void check() {
+		
+		
+		System.out.println(ActivityDAO.getActivityDAO().getSpotsByMonthActivityType());
+	}
 
-
+//		MongoCursor<Document> cursor = ActivityDAO.getActivityDAO().getSpotsByMonthActivityType().cursor();
+//
+//		if (cursor.hasNext()) {
+//
+//			try {
+//				while (cursor.hasNext()) {
+//
+//					Document activity = cursor.next();
+//
+//					System.out.println(activity);
+//
+//				}
+//			} finally {
+//				cursor.close();
+//			}
+//
+//		}
+	
+	
+//
+//	}
+	
 }
