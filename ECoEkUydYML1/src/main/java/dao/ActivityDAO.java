@@ -154,22 +154,20 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 	}
 	
 	
-	public ArrayList<Document> getSpotsByMonthActivityType() {
+	public AggregateIterable<Document> getSpotsByMonthActivityType() {
 		
 
-		Bson project =Aggregates.project(new Document("activityName",1).append("availableSpots", 1).append("type",1).append("year",new Document("$year","$startDate")).append("month",new Document("$year","$startDate")));
+		Bson project =Aggregates.project(new Document("activityName",1).append("availableSpots", 1).append("type",1).append("year",new Document("$year","$startDate")).append("month",new Document("$month","$startDate")));
 		Bson matchStage = Aggregates.match(Filters.eq("year",2022));
 		List<BsonField> acumuladores = new ArrayList<BsonField>();
 		acumuladores.add(Accumulators.sum("availableSpots","$availableSpots"));
 		acumuladores.add(Accumulators.sum("numActivities",1));	
 		acumuladores.add(Accumulators.addToSet("nameActivities","$activityName"));
-		List<String> fields = new ArrayList<>();
-		fields.add("$month");
-		fields.add("$type");
+		Document fields = new Document("month","$month").append("type", "$type");
 	    Bson groupStage = Aggregates.group(fields, acumuladores);
 		
 		
-		return collection_nocodec.aggregate(Arrays.asList(project,matchStage,groupStage)).into(new ArrayList<>());
+		return collection_nocodec.aggregate(Arrays.asList(project,matchStage,groupStage));
 		
 		
 	}
