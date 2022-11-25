@@ -13,7 +13,7 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 	</properties>
 	<build>
-			<plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -22,6 +22,8 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 		</plugins>
 		<finalName>ECoEkUydYML1</finalName>
 	</build>
+
+
 	<dependencies>
 
 		<dependency>
@@ -42,9 +44,30 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.faces</artifactId>
+			<version>2.3.16</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet-shaded</artifactId>
+			<version>3.1.8.Final</version>
+		</dependency>
+
+<dependency>
+    <groupId>org.primefaces</groupId>
+    <artifactId>primefaces</artifactId>
+    <version>12.0.0</version>
+</dependency>
+
 	</dependencies>
-	
-	
-	
+
+
 </project>

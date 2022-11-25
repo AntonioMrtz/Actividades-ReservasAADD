@@ -1,0 +1,32 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:p="http://primefaces.org/ui">
+
+ <ui:define name="title">
+Inicio
+</ui:define>
+
+<h:head>
+
+    <h:form>
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            
+            <p:menuitem value="Profile" icon="pi pi-fw pi-user" url="index.xhtml"/>
+            <p:menuitem value="Crear Actividad" icon="" url="crear_actividad.xhtml"/>
+            <p:menuitem value="Ver Reservas" icon="" url="ver_reservas.xhtml"/>
+            <p:menuitem value="Actividades" icon="" url="actividades.xhtml"/>
+            
+      </p:menubar>
+      </h:form>
+
+
+
+</h:head>
+    
+
+</ui:composition>

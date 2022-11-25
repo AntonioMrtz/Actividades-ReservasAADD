@@ -1,0 +1,147 @@
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:p="http://primefaces.org/ui">
+
+ <ui:define name="title">
+Inicio
+</ui:define>
+
+
+
+
+<h:head>
+
+    <h:form>
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            
+            <p:menuitem value="Home" icon="pi pi-fw pi-user" url="index.xhtml"/>
+            <p:menuitem value="Crear Actividad" icon="" url="old/index.html"/>
+            <p:menuitem value="Ver Reservas" icon="" url="old/ver_reservas"/>
+            <p:menuitem value="Actividades" icon="" url="actividades.xhtml"/>
+            
+      </p:menubar>
+      </h:form>
+      
+<style>
+    p {
+        line-height: 1.5;
+        margin: 0;
+    }
+</style>
+
+<style>
+
+	html{
+		background-color:white;
+		/*filter:invert(100%);*/
+	}
+	
+	
+</style>
+
+        <style> 
+            #leftbox {
+                float:left; 
+                margin-left:10%;
+                
+                width:25%;
+                height:280px;
+            }
+            #middlebox{
+                float:left; 
+               
+                width:50%;
+                height:280px;
+            }
+            #rightbox{
+                float:right;
+               	margin-right:10%;
+                width:25%;
+                height:280px;
+            }
+            h1{
+                
+                text-align:center;
+            }
+        </style>
+
+
+<div id="boxes">
+
+
+<div id="middlebox" style="margin-left:10%">
+
+<h5>Default Filter</h5>
+    <h:form>
+        <p:dataTable var="customer" value="#{dtFilterView.customers2}" widgetVar="customersTable2"
+            emptyMessage="No se encontraron actividades con los criterios especificados"
+            filteredValue="#{dtFilterView.filteredCustomers2}" filterBy="#{dtFilterView.filterBy}" styles="max-width:100%">
+
+            <f:facet name="header">
+                <span>List of Customers</span>
+            </f:facet>
+
+            <p:column headerText="Name" sortBy="#{customer.name}" filterBy="#{customer.name}">
+                <h:outputText value="#{customer.name}" />
+            </p:column>
+
+            <p:column headerText="Country" sortBy="#{customer.country.name}" filterBy="#{customer.country.name}">
+                <span class="flag flag-#{customer.country.code}" style="width: 30px; height: 20px" />
+                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{customer.country.name}" />
+            </p:column>
+
+            <p:column field="representative" headerText="Representative" filterMatchMode="exact"
+                      sortBy="#{customer.representative.name}">
+                <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('customersTable').filter()" styleClass="custom-filter">
+                        <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtFilterView.representatives}" />
+                    </p:selectOneMenu>
+                </f:facet>
+
+                <p:graphicImage name="images/avatar/#{customer.representative.image}" library="demo" width="32"
+                                style="vertical-align: middle" />
+                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{customer.representative.name}" />
+            </p:column>
+
+            <p:column field="date" headerText="Join Date" filterMatchMode="between">
+                <f:facet name="filter">
+                    <p:datePicker selectionMode="range" onchange="PF('customersTable2').filter()" styleClass="ui-custom-filter"/>
+                </f:facet>
+            </p:column>
+
+            <p:column field="status" headerText="Status" filterMatchMode="exact">
+                <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('customersTable2').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtFilterView.customerStatus}" />
+                    </p:selectOneMenu>
+                </f:facet>
+
+                <span class="customer-badge status-#{customer.status.name().toLowerCase()}">#{customer.status.toString()}</span>
+            </p:column>
+
+            <p:column field="activity" headerText="Activity" sortBy="#{customer.activity}"
+                      converter="javax.faces.Integer">
+                <p:progressBar value="#{customer.activity}" displayOnly="true" style="height: .5rem" />
+            </p:column>
+        </p:dataTable>
+        </h:form>
+
+
+
+</div>
+
+</div>
+
+
+</h:head>
+    
+
+</ui:composition>

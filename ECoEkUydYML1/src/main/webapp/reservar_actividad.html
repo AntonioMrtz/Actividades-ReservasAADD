@@ -15,6 +15,7 @@
 			<div>
 				<label>Código de la actividad a reservar: </label><input name="actividad">
 			</div>
+			<br>
 						
 			<input type="hidden" name="searchType" value="all" />
 			<input type="submit" value="Reservar" class="enviar">	
@@ -28,6 +29,10 @@
  		<form method="POST" action="reservar?ver_reservas" class="form">
 			<input type="hidden" name="searchType" value="all" />
 			<input type="submit" value="Ver reservas" class="enviar">	
+		</form>
+		
+		<form method="POST" action="index.xhtml" class="form">
+			<input type="submit" value="Volver a Inicio" class="atras">	
 		</form>
    
 	</div>

@@ -1,0 +1,109 @@
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:p="http://primefaces.org/ui">
+
+ <ui:define name="title">
+Inicio
+</ui:define>
+
+
+
+
+<h:head>
+
+    <h:form>
+        <p:growl id="messages"/>
+
+        <p:menubar>
+            
+           <p:menuitem value="Home" icon="pi pi-fw pi-user" url="index.xhtml"/>
+            <p:menuitem value="Crear Actividad" icon="" url="index.html"/>
+            <p:menuitem value="Ver Reservas" icon="" url="ver_actividades.html"/>
+            <p:menuitem value="Actividades" icon="" url="actividades.xhtml"/>
+            
+      </p:menubar>
+      </h:form>
+      
+<style>
+    p {
+        line-height: 1.5;
+        margin: 0;
+    }
+</style>
+
+<style>
+
+	html{
+		background-color:white;
+		/*filter:invert(100%);*/
+	}
+	
+	
+</style>
+
+        <style> 
+            #leftbox {
+                float:left; 
+                margin-left:5%;
+                margin-top:3%;
+                
+                width:25%;
+                height:280px;
+            }
+            #middlebox{
+                float:left; 
+               
+                width:50%;
+                height:280px;
+            }
+            #rightbox{
+                float:right;
+               	margin-right:10%;
+                width:25%;
+                height:280px;
+            }
+            h1{
+                
+                text-align:center;
+            }
+        </style>
+
+
+<div id="boxes">
+
+	<div id="leftbox">
+
+<p:card  style="width: 25em;size:75%">
+    <f:facet name="header">
+        <img alt="user header" src="imgs/home.jpg" style="max-width:75%;margin-left:5%"/>
+    </f:facet>
+    <f:facet name="title">
+        Actividades y reservas
+    </f:facet>
+    <f:facet name="subtitle">
+        By Actividades y Reservas Company
+    </f:facet>
+
+    <p>Consulta y crea tus reservas en el mejor portal online de booking de actividades.</p>
+
+</p:card>
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+</h:head>
+    
+
+</ui:composition>
