@@ -171,6 +171,35 @@ public class ActivityDAO extends MongoCodecDAO<Activity> {
 		
 		
 	}
+	
+	public List<Activity> getAllActivities(){
+		
+		ArrayList<Activity> actividades= new ArrayList<>();
+		
+		
+		MongoCursor<Activity> cursor = ActivityDAO.getActivityDAO().getAvailableActivities();
+		
+		if (cursor.hasNext()) {
+
+			try {
+				while (cursor.hasNext()) {
+
+					Activity activity = cursor.next();
+					System.out.println(activity);
+
+					actividades.add(activity);
+
+				}
+			} finally {
+				cursor.close();
+			}
+
+		}
+		
+		return actividades;
+	}
+	
+	
 
 
 }

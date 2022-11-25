@@ -1,46 +1,59 @@
 package aadd.web;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.MatchMode;
+import org.primefaces.util.LangUtils;
+
+import aadd.bean.Activity;
+import dao.ActivityDAO;
 
 @Named("dtFilterView")
 @ViewScoped
 public class FilterView implements Serializable {
 
-    @Inject
-    private CustomerService service;
+	
 
-    private List<Customer> customers1;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private List<Customer> customers2;
+	//@Inject
+    private ActivityDAO service;
 
-    private List<Customer> customers3;
+    private List<Activity> actividades;
 
-    private List<Customer> filteredCustomers1;
-
-    private List<Customer> filteredCustomers2;
-
-    private List<Customer> filteredCustomers3;
+    private List<Activity> filteredCustomers1;
 
     private List<FilterMeta> filterBy;
 
     private boolean globalFilterOnly;
+    
+    private String[] tipos;
 
     @PostConstruct
     public void init() {
         globalFilterOnly = false;
-        customers1 = service.getCustomers(10);
-        customers2 = service.getCustomers(50);
-        customers3 = service.getCustomers(10);
+        tipos=getTipos();
+       
+        actividades=ActivityDAO.getActivityDAO().getAllActivities();
 
         filterBy = new ArrayList<>();
 
         filterBy.add(FilterMeta.builder()
-                .field("status")
-                .filterValue(CustomerStatus.NEW)
+                .field("tipo")
+                .filterValue(tipos)
                 .matchMode(MatchMode.EQUALS)
                 .build());
 
@@ -58,14 +71,16 @@ public class FilterView implements Serializable {
             return true;
         }
         int filterInt = getInteger(filterText);
+        
+        return true;
 
-        Customer customer = (Customer) value;
-        return customer.getName().toLowerCase().contains(filterText)
-                || customer.getCountry().getName().toLowerCase().contains(filterText)
-                || customer.getRepresentative().getName().toLowerCase().contains(filterText)
-                || customer.getDate().toString().toLowerCase().contains(filterText)
-                || customer.getStatus().name().toLowerCase().contains(filterText)
-                || customer.getActivity() < filterInt;
+        //Customer customer = (Customer) value;
+//        return customer.getName().toLowerCase().contains(filterText)
+//                || customer.getCountry().getName().toLowerCase().contains(filterText)
+//                || customer.getRepresentative().getName().toLowerCase().contains(filterText)
+//                || customer.getDate().toString().toLowerCase().contains(filterText)
+//                || customer.getStatus().name().toLowerCase().contains(filterText)
+//                || customer.getActivity() < filterInt;
     }
 
     public void toggleGlobalFilter() {
@@ -81,53 +96,46 @@ public class FilterView implements Serializable {
         }
     }
 
-    public List<Representative> getRepresentatives() {
-        return service.getRepresentatives();
+    public String[] getTipos() {
+    	String[] array = new String[]{"	artesania","cine","fotografía","mind&body" }; 
+        return array;
     }
+    
+   
 
-    public CustomerStatus[] getCustomerStatus() {
-        return service.getCustomerStatus();
-    }
+    public ActivityDAO getService() {
+		return service;
+	}
 
-    public List<Customer> getCustomers1() {
-        return customers1;
-    }
+	public void setService(ActivityDAO service) {
+		this.service = service;
+	}
 
-    public List<Customer> getCustomers2() {
-        return customers2;
-    }
+	public List<Activity> getActividades() {
+		return actividades;
+	}
 
-    public List<Customer> getCustomers3() {
-        return customers3;
-    }
+	public void setActividades(List<Activity> actividades) {
+		this.actividades = actividades;
+	}
 
-    public List<Customer> getFilteredCustomers1() {
+	public void setFilterBy(List<FilterMeta> filterBy) {
+		this.filterBy = filterBy;
+	}
+
+	public void setTipos(String[] tipos) {
+		this.tipos = tipos;
+	}
+
+	public List<Activity> getFilteredCustomers1() {
         return filteredCustomers1;
     }
 
-    public void setFilteredCustomers1(List<Customer> filteredCustomers1) {
+    public void setFilteredCustomers1(List<Activity> filteredCustomers1) {
         this.filteredCustomers1 = filteredCustomers1;
     }
 
-    public List<Customer> getFilteredCustomers2() {
-        return filteredCustomers2;
-    }
 
-    public void setFilteredCustomers2(List<Customer> filteredCustomers2) {
-        this.filteredCustomers2 = filteredCustomers2;
-    }
-
-    public List<Customer> getFilteredCustomers3() {
-        return filteredCustomers3;
-    }
-
-    public void setFilteredCustomers3(List<Customer> filteredCustomers3) {
-        this.filteredCustomers3 = filteredCustomers3;
-    }
-
-    public void setService(CustomerService service) {
-        this.service = service;
-    }
 
     public List<FilterMeta> getFilterBy() {
         return filterBy;
