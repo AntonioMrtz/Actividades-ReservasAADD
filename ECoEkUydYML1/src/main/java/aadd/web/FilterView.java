@@ -70,17 +70,19 @@ public class FilterView implements Serializable {
         if (LangUtils.isBlank(filterText)) {
             return true;
         }
-        int filterInt = getInteger(filterText);
+        //int filterInt = getInteger(filterText);
         
-        return true;
+        //return true;
 
-        //Customer customer = (Customer) value;
-//        return customer.getName().toLowerCase().contains(filterText)
-//                || customer.getCountry().getName().toLowerCase().contains(filterText)
-//                || customer.getRepresentative().getName().toLowerCase().contains(filterText)
-//                || customer.getDate().toString().toLowerCase().contains(filterText)
-//                || customer.getStatus().name().toLowerCase().contains(filterText)
-//                || customer.getActivity() < filterInt;
+        Activity a = (Activity) value;
+        
+        System.out.println(a);
+        
+        return a.getActivityName().toLowerCase().contains(filterText)
+                ||a.getType().toLowerCase().contains(filterText)
+                || a.getAvailableSpots()==Integer.parseInt(filterText)
+                || a.getCode().toLowerCase().contains(filterText);
+                
     }
 
     public void toggleGlobalFilter() {
